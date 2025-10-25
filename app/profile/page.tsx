@@ -1,7 +1,7 @@
+import ProfileClient from "./profile-client";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import HomePage from "./_components/HomePage";
 
 export default async function page() {
   const session = await auth.api.getSession({
@@ -11,10 +11,9 @@ export default async function page() {
   if (!session) {
     redirect("/auth");
   }
-
   return (
     <div>
-      <HomePage session={session} />
+      <ProfileClient session={session} />
     </div>
   );
 }

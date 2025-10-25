@@ -1,20 +1,20 @@
 import { auth } from "@/lib/auth";
+import AuthClient from "./AuthClient";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import HomePage from "./_components/HomePage";
 
 export default async function page() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
-  if (!session) {
-    redirect("/auth");
+  if (session) {
+    redirect("/");
   }
 
   return (
     <div>
-      <HomePage session={session} />
+      <AuthClient />
     </div>
   );
 }
