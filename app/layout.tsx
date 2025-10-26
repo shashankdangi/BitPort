@@ -33,6 +33,7 @@ export default async function RootLayout({
   const session = await auth.api.getSession({
     headers: await headers(),
   });
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -44,8 +45,25 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar session={session} />
-          <main className="p-[1rem]">{children}</main>
+          <div className="min-h-screen w-full bg-[#020617] relative md:p-[1rem]">
+            {/* Dark Sphere Grid Background */}
+            <div
+              className="absolute inset-0 ]"
+              style={{
+                background: "#020617",
+                backgroundImage: `
+        linear-gradient(to right, rgba(71,85,105,0.3) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(71,85,105,0.3) 1px, transparent 1px),
+        radial-gradient(circle at 50% 50%, rgba(139,92,246,0.15) 0%, transparent 70%)
+      `,
+                backgroundSize: "32px 32px, 32px 32px, 100% 100%",
+              }}
+            />
+            {/* Your Content/Components */}
+            <Navbar session={session} />
+            <main className="p-[1rem] z-10 relative"> {children}</main>
+          </div>
+
           <Toaster position="top-right" />
         </ThemeProvider>
       </body>

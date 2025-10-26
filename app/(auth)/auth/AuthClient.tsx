@@ -50,7 +50,7 @@ export default function AuthClient() {
           }
         );
         router.refresh();
-      } catch (error) {
+      } catch (error: any) {
         setError(error?.message || "Failed to SignIn");
       } finally {
         setLoading(false);
@@ -86,7 +86,7 @@ export default function AuthClient() {
           }
         );
         router.refresh();
-      } catch (error) {
+      } catch (error: any) {
         setError(error?.message);
       } finally {
         setLoading(false);
@@ -95,12 +95,12 @@ export default function AuthClient() {
   };
 
   return (
-    <div className="flex items-center justify-center w-full min-h-[80vh]">
-      <div className="w-[300px] h-auto border-2 p-5 bg-card  flex flex-col gap-3 rounded-md mx-auto">
+    <div className="flex items-center  w-full  mt-10">
+      <div className="md:w-[300px] w-full py-10  h-auto border-2   p-5 bg-card/10 backdrop-blur-3xl  flex flex-col gap-3 rounded-xl mx-auto">
         {/* Sign In Form */}
         {isSignIn && (
-          <div className="flex flex-col gap-2">
-            <h1 className="font-bold text-xl text-center p-2 mb-2">
+          <div className="flex flex-col gap-3 text-2xl">
+            <h1 className="font-bold text-3xl text-center p-2 mb-2">
               Welcome Back !
             </h1>
             {error && (
@@ -169,9 +169,13 @@ export default function AuthClient() {
         )}
         {!isSignIn && (
           <div>
-            <h1 className="text-center text-xl font-bold mb-3">Register</h1>
+            <h1 className="text-center text-3xl font-bold mb-3">Register</h1>
             {error && (
-              <Alert variant="destructive" appearance="light">
+              <Alert
+                variant="destructive"
+                appearance="light"
+                className="backdrop-blur-3xl my-2 text-sm flex items-center"
+              >
                 <AlertIcon>
                   <TriangleAlert />
                 </AlertIcon>
@@ -245,7 +249,7 @@ export default function AuthClient() {
                 </Button>
               </div>
             </form>
-            <p className="text-sm mt-3 italic">
+            <p className="text-sm mt-3 italic text-center">
               Already a User ?{" "}
               <Button
                 className="cursor-pointer"

@@ -7,7 +7,7 @@ import { nextCookies } from "better-auth/next-js";
 const prisma = new PrismaClient();
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
-    provider: "mysql", // or "mysql", "postgresql", ...etc
+    provider: "postgresql", // or "mysql", "postgresql", ...etc
   }),
   user: {
     deleteUser: {
@@ -17,5 +17,12 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+  cookies: {
+    name: "better-auth-session",
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+  },
+
   plugins: [nextCookies()],
 });
