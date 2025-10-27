@@ -6,27 +6,33 @@ import { Alert, AlertIcon, AlertTitle } from "@/components/ui/alert";
 import { AlertTriangle } from "lucide-react";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
+import { useMutation } from "@tanstack/react-query";
+
+//@ axios function to POST
+async function createShortUrl(url: string) {
+  const res = await axios.post("/api/short", { url });
+  return res.data.data.shortId as string;
+}
 
 export default function UrlShortner() {
   const [url, setUrl] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
   const [shortLink, setShortLink] = useState<string | null>(null);
 
+  //@ React Query Mutation
+  const { mutate, isPending, error } = useMutation({
+    mutationFn: createShortUrl,
+    onSuccess: (shortId) => {
+      setShortLink(`${window.location.origin}/${shortId}`);
+    },
+  });
+
+  //# Handle Submit Function
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!url) return;
-    try {
-      setLoading(true);
-      setError("");
-      const res = await axios.post("/api/short", { url });
-      setShortLink(`${window.location.href}${res.data.data.shortId}`);
-    } catch (error: any) {
-      setError(error?.message);
-    } finally {
-      setLoading(false);
-    }
+    mutate(url);
   };
+
   return (
     <div className="">
       {error && (
@@ -38,13 +44,15 @@ export default function UrlShortner() {
           <AlertIcon>
             <AlertTriangle />
           </AlertIcon>
-          <AlertTitle className="text-foreground/80">{error}</AlertTitle>
+          <AlertTitle className="text-foreground/80">
+            {error.message}
+          </AlertTitle>
         </Alert>
       )}
       <UrlShortForm
         url={setUrl}
         handleSubmit={handleSubmit}
-        loading={loading}
+        loading={isPending}
       />
       {shortLink && (
         <div>
